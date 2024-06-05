@@ -15,6 +15,7 @@ public class User {
     private String phone;
 
     @ManyToOne
+    @JoinColumn(name = "departmentId")
     private Department department;
 
     public User() {
@@ -43,9 +44,7 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
-    }
+    public int getAge() { return age; }
 
     public void setAge(int age) {
         this.age = age;
@@ -58,4 +57,11 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public Department getDepartment() { return department; }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
 }

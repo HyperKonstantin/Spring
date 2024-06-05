@@ -9,7 +9,7 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "departmentId")
-    private int departmentId;
+    private long departmentId;
     private String department;
 
     public Department(int departmentId, String department) {
@@ -20,7 +20,7 @@ public class Department {
     public Department() {
     }
 
-    public int getDepartmentId() {
+    public long getDepartmentId() {
         return departmentId;
     }
 

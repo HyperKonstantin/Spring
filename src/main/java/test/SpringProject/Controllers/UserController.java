@@ -1,7 +1,6 @@
 package test.SpringProject.Controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +11,9 @@ import test.SpringProject.Entities.User;
 import test.SpringProject.Repositories.DepartmentRepo;
 import test.SpringProject.Repositories.UserRepo;
 
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
-@Tag(name = "UserData", description = "работает с данными пользователя")
+@Tag(name = "UserQuery", description = "работает с данными пользователя")
 @CrossOrigin
 @RestController
 public class UserController {
@@ -70,5 +67,4 @@ public class UserController {
         userRepo.deleteById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 }
