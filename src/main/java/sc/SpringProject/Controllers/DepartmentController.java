@@ -1,18 +1,18 @@
-package test.SpringProject.Controllers;
+package sc.SpringProject.Controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import test.SpringProject.Entities.Department;
-import test.SpringProject.Entities.User;
-import test.SpringProject.Repositories.DepartmentRepo;
-import test.SpringProject.Repositories.UserRepo;
+import sc.SpringProject.Repositories.DepartmentRepo;
+import sc.SpringProject.Entities.Department;
+import sc.SpringProject.Entities.User;
+import sc.SpringProject.Repositories.UserRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +20,11 @@ import java.util.Optional;
 @Tag(name = "DepartmentQuery", description = "запросы с отделами")
 @RestController
 @CrossOrigin
+@AllArgsConstructor
 public class DepartmentController {
 
-    @Autowired
     private UserRepo userRepo;
-    @Autowired
+
     private DepartmentRepo departmentRepo;
 
     @Operation(summary = "Возвращает все отделы")
@@ -37,8 +37,10 @@ public class DepartmentController {
     @GetMapping("/find-by-department-id")
     public ResponseEntity<?> FindUserByDepartmentId(@RequestParam long departmentId){
         Optional<Department> department = departmentRepo.findById(departmentId);
-        if (department.isEmpty())
+
+        if (department.isEmpty()) {
             return new ResponseEntity<>("такого отдела нет", HttpStatus.BAD_REQUEST);
+        }
 
         List<User> users = userRepo.findByDepartment(department.get());
         return new ResponseEntity<>(users, HttpStatus.OK);

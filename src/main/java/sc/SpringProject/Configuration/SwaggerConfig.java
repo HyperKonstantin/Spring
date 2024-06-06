@@ -1,4 +1,4 @@
-package test.SpringProject.Configuration;
+package sc.SpringProject.Configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public OpenAPI api() {
         return new OpenAPI()

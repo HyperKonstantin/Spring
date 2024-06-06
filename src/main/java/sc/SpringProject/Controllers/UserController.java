@@ -1,26 +1,26 @@
-package test.SpringProject.Controllers;
+package sc.SpringProject.Controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import test.SpringProject.Entities.Department;
-import test.SpringProject.Entities.User;
-import test.SpringProject.Repositories.DepartmentRepo;
-import test.SpringProject.Repositories.UserRepo;
+import sc.SpringProject.Repositories.DepartmentRepo;
+import sc.SpringProject.Entities.Department;
+import sc.SpringProject.Entities.User;
+import sc.SpringProject.Repositories.UserRepo;
 
 import java.util.Optional;
 
 @Tag(name = "UserQuery", description = "работает с данными пользователя")
 @CrossOrigin
 @RestController
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
     private UserRepo userRepo;
-    @Autowired
+
     private DepartmentRepo departmentRepo;
 
     @Operation(
@@ -39,6 +39,7 @@ public class UserController {
     @GetMapping("/add-user")
     public ResponseEntity<?> addUser(@RequestParam String name, @RequestParam int age, @RequestParam String phone, @RequestParam long departmentId){
         Optional<Department> department = departmentRepo.findById(departmentId);
+
         if (department.isEmpty())
             return new ResponseEntity<>("указанный отдел отсутствует", HttpStatus.BAD_REQUEST);
 
@@ -64,6 +65,10 @@ public class UserController {
     @GetMapping("/delete-user")
     public ResponseEntity<?> deleteUser(@RequestParam long id){
         Optional<User> user = userRepo.findById(id);
+
+        if (user.isEmpty())
+            return new ResponseEntity<>("Такого пользователя нет", HttpStatus.BAD_REQUEST);
+
         userRepo.deleteById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
