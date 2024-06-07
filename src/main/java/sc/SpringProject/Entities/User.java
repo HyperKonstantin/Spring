@@ -1,5 +1,7 @@
 package sc.SpringProject.Entities;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
 
     @Id
@@ -22,8 +25,9 @@ public class User {
 
     private String phone;
 
+    //@JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "departmentId")
+    @JoinColumn(name = "department")
     private Department department;
 
     public User(String name, int age, String phone, Department department) {

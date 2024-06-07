@@ -3,6 +3,7 @@ package sc.SpringProject.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,7 @@ import sc.SpringProject.Repositories.UserRepo;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Tag(name = "DepartmentQuery", description = "запросы с отделами")
 @RestController
 @CrossOrigin
@@ -30,6 +32,7 @@ public class DepartmentController {
     @Operation(summary = "Возвращает все отделы")
     @GetMapping("/get-departments")
     public ResponseEntity<?> getDepartments(){
+        log.info("Get query");
         return new ResponseEntity<>(departmentRepo.findAll(), HttpStatus.OK);
     }
 
@@ -44,5 +47,13 @@ public class DepartmentController {
 
         List<User> users = userRepo.findByDepartment(department.get());
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Добавляет отдел")
+    @GetMapping("/add-department")
+    public ResponseEntity<?> addDepartment(@RequestParam String name){
+        Department department = new Department(name);
+        departmentRepo.save(department);
+        return new ResponseEntity<>(department, HttpStatus.OK);
     }
 }
