@@ -1,8 +1,8 @@
-package sc.SpringProject.Repositories;
+package sc.springProject.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import sc.SpringProject.Entities.Department;
-import sc.SpringProject.Entities.User;
+import sc.springProject.entities.Department;
+import sc.springProject.entities.User;
 
 import java.util.List;
 

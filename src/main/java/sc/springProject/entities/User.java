@@ -1,7 +1,5 @@
-package sc.SpringProject.Entities;
+package sc.springProject.entities;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

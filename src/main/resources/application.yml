@@ -1,12 +1,35 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.246.64:6432/test?autoReconnect=true
-    username: ccs
-    password: ccs
+#    url: jdbc:postgresql://192.168.246.64:6432/test?autoReconnect=true
+#    username: ccs
+#    password: ccs
+    url: jdbc:postgresql://localhost:5432/localdb
+    username: postgres
+    password: ss1108lx
+
+
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    show-sql: false
+    hibernate.ddl-auto: none
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.show_sql: false
+      hibernate.use_sql_comments: false
+      hibernate.format_sql: false
+      javax.persistence.sharedCache.mode: NONE
+
+  flyway.enabled: true
+  flyway:
+#    url: jdbc:postgresql://192.168.246.64:6432/profiles?autoReconnect=true
+#    locations: classpath:profiles.db.migration
+#    schemas: public
+#    user: ccs
+#    password: ccs
+    baselineOnMigrate: true
 
 logging:
   level:

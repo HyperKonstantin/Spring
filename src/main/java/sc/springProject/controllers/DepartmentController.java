@@ -1,4 +1,4 @@
-package sc.SpringProject.Controllers;
+package sc.springProject.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sc.SpringProject.Repositories.DepartmentRepo;
-import sc.SpringProject.Entities.Department;
-import sc.SpringProject.Entities.User;
-import sc.SpringProject.Repositories.UserRepo;
+import sc.springProject.repositories.DepartmentRepo;
+import sc.springProject.entities.Department;
+import sc.springProject.entities.User;
+import sc.springProject.repositories.UserRepo;
 
 import java.util.List;
 import java.util.Optional;

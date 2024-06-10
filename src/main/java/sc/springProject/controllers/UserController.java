@@ -1,4 +1,4 @@
-package sc.SpringProject.Controllers;
+package sc.springProject.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sc.SpringProject.Repositories.DepartmentRepo;
-import sc.SpringProject.Entities.Department;
-import sc.SpringProject.Entities.User;
-import sc.SpringProject.Repositories.UserRepo;
+import sc.springProject.repositories.DepartmentRepo;
+import sc.springProject.entities.Department;
+import sc.springProject.entities.User;
+import sc.springProject.repositories.UserRepo;
 
 import java.util.Optional;
 

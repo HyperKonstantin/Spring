@@ -1,7 +1,7 @@
-package sc.SpringProject.Repositories;
+package sc.springProject.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import sc.SpringProject.Entities.Department;
+import sc.springProject.entities.Department;
 
 public interface DepartmentRepo extends CrudRepository<Department, Long> {
 }

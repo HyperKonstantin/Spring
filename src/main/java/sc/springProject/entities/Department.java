@@ -1,10 +1,9 @@
-package sc.SpringProject.Entities;
+package sc.springProject.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
