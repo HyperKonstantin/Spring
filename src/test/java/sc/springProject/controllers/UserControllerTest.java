@@ -17,8 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(value = "/start_test_script.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Sql(value = "/end_test_script.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 
 public class UserControllerTest {
 

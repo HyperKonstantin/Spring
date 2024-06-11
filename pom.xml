@@ -64,9 +64,10 @@
 			<version>9.1.0</version>
 		</dependency>
 
-		<dependency> <!-- tests -->
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+		<dependency> <!-- tests (embedded postgres) -->
+			<groupId>com.opentable.components</groupId>
+			<artifactId>otj-pg-embedded</artifactId>
+			<version>1.0.3</version>
 			<scope>test</scope>
 		</dependency>
 
