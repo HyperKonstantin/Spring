@@ -1,11 +1,11 @@
 spring:
   datasource:
-#    url: jdbc:postgresql://192.168.246.64:6432/test?autoReconnect=true
-#    username: ccs
-#    password: ccs
-    url: jdbc:postgresql://localhost:5432/localdb
-    username: postgres
-    password: ss1108lx
+    url: jdbc:postgresql://192.168.246.64:6432/test?autoReconnect=true
+    username: ccs
+    password: ccs
+#    url: jdbc:postgresql://localhost:5432/localdb
+#    username: postgres
+#    password: ss1108lx
 
 
   jpa:
@@ -24,11 +24,11 @@ spring:
 
   flyway.enabled: true
   flyway:
-#    url: jdbc:postgresql://192.168.246.64:6432/profiles?autoReconnect=true
-#    locations: classpath:profiles.db.migration
-#    schemas: public
-#    user: ccs
-#    password: ccs
+    url: jdbc:postgresql://192.168.246.64:6432/test?autoReconnect=true
+    locations: classpath:db.migration
+    schemas: public
+    user: ccs
+    password: ccs
     baselineOnMigrate: true
 
 logging:

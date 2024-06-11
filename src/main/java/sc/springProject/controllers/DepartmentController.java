@@ -54,6 +54,23 @@ public class DepartmentController {
     public ResponseEntity<?> addDepartment(@RequestParam String name){
         Department department = new Department(name);
         departmentRepo.save(department);
+
         return new ResponseEntity<>(department, HttpStatus.OK);
+    }
+
+    @GetMapping("/swap-user-departments")
+    public ResponseEntity<?> swapDepartments(@RequestParam long firstUserId, @RequestParam long secondUserId){
+        Optional<User> firstUser = userRepo.findById(firstUserId);
+        Optional<User> secondUser = userRepo.findById(secondUserId);
+
+        if (firstUser.isEmpty() || secondUser.isEmpty()){
+            return new ResponseEntity<>("Пользователя с таким id не существует!", HttpStatus.BAD_REQUEST);
+        }
+        long firstUserDepartmentId = firstUser.get().getDepartment().getDepartmentId();
+        long secondUserDepartmentId = secondUser.get().getDepartment().getDepartmentId();
+
+        userRepo.changeDepartmentId(firstUser.get().getId(), secondUserDepartmentId);
+        userRepo.changeDepartmentId(secondUser.get().getId(), firstUserDepartmentId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

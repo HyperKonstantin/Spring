@@ -5,7 +5,7 @@ create table departments (
 );
 
 create table users (
-    id integer not null,
+    id bigint not null,
     age integer not null,
     name varchar(255),
     phone varchar(255),
