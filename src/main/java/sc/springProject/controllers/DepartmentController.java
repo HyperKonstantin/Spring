@@ -66,11 +66,12 @@ public class DepartmentController {
         if (firstUser.isEmpty() || secondUser.isEmpty()){
             return new ResponseEntity<>("Пользователя с таким id не существует!", HttpStatus.BAD_REQUEST);
         }
-        long firstUserDepartmentId = firstUser.get().getDepartment().getDepartmentId();
-        long secondUserDepartmentId = secondUser.get().getDepartment().getDepartmentId();
+        long firstUserDepartmentId = firstUser.get().getDepartment().getId();
+        long secondUserDepartmentId = secondUser.get().getDepartment().getId();
 
-        userRepo.changeDepartmentId(firstUser.get().getId(), secondUserDepartmentId);
-        userRepo.changeDepartmentId(secondUser.get().getId(), firstUserDepartmentId);
+        //TODO
+//        userRepo.changeDepartmentId(firstUser.get().getId(), secondUserDepartmentId);
+//        userRepo.changeDepartmentId(secondUser.get().getId(), firstUserDepartmentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

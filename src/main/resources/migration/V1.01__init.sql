@@ -1,7 +1,7 @@
 create table departments (
-    department_id bigint not null,
+    id bigint not null,
     department varchar(255),
-    primary key (department_id)
+    primary key (id)
 );
 
 create table users (
