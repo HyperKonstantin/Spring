@@ -1,18 +1,6 @@
 spring:
-  datasource:
-    #necessary to increment port by 2
-    url: jdbc:postgresql://localhost:32803/postgres?loggerLevel=OFF
-    username: ccs
-    password: ccs
-
   flyway.enabled: true
   flyway:
-    #necessary to increment port by 2
-    url: jdbc:postgresql://localhost:32803/postgres?loggerLevel=OFF
     locations:
     - filesystem:/home/konstantin/projects/SpringProject/src/test/resources/migration
     - filesystem:/home/konstantin/projects/SpringProject/src/main/resources/migration
-    schemas: public
-    user: postgres
-    password: ss1108lx
-    baselineOnMigrate: true
