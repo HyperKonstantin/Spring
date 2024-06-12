@@ -2,6 +2,7 @@ package sc.springProject.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,4 +73,16 @@ public class UserController {
         userRepo.deleteById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @Operation(
+            summary = "Изменяет имя пользователя",
+            description = "изменяет имя пользователя с некоторым <strong>id</strong> на параметр <strong>name</strong>"
+    )
+    @Transactional
+    @GetMapping("/change-user-name")
+    public ResponseEntity<?> changeUserName(@RequestParam long id, @RequestParam String name){
+        userRepo.changeName(id, name);
+        return new ResponseEntity<>(userRepo.findById(id), HttpStatus.OK);
+    }
+
 }

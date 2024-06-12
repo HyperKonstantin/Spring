@@ -17,7 +17,7 @@ public interface UserRepo extends CrudRepository<User, Long> {
 
     @Modifying
     @Query("UPDATE User SET department = ?2 WHERE id = ?1")
-    void changeDepartmentId(@Param("userId") long userId, @Param("department") Department department);
+    void changeDepartment(@Param("userId") long userId, @Param("department") Department department);
 
     @Modifying
     @Query("UPDATE User SET name = ?2 WHERE id = ?1")
