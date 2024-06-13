@@ -2,6 +2,7 @@ package sc.springProject.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sc.springProject.dto.UserDto;
 import sc.springProject.repositories.DepartmentRepo;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
 import sc.springProject.repositories.UserRepo;
+import sc.springProject.services.DtoMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +31,8 @@ public class DepartmentController {
     private UserRepo userRepo;
 
     private DepartmentRepo departmentRepo;
+
+    private DtoMapper dtoMapper;
 
     @Operation(summary = "Возвращает все отделы")
     @GetMapping("/get-departments")
@@ -46,7 +51,8 @@ public class DepartmentController {
         }
 
         List<User> users = userRepo.findByDepartment(department.get());
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserDto> usersDto = users.stream().map(dtoMapper::mapToUserDto).toList();
+        return new ResponseEntity<>(usersDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Добавляет отдел")
@@ -58,6 +64,7 @@ public class DepartmentController {
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
+    @Transactional
     @GetMapping("/swap-user-departments")
     public ResponseEntity<?> swapDepartments(@RequestParam long firstUserId, @RequestParam long secondUserId){
         Optional<User> firstUser = userRepo.findById(firstUserId);
@@ -66,12 +73,11 @@ public class DepartmentController {
         if (firstUser.isEmpty() || secondUser.isEmpty()){
             return new ResponseEntity<>("Пользователя с таким id не существует!", HttpStatus.BAD_REQUEST);
         }
-        long firstUserDepartmentId = firstUser.get().getDepartment().getId();
-        long secondUserDepartmentId = secondUser.get().getDepartment().getId();
+        Department firstUserDepartment = firstUser.get().getDepartment();
+        Department secondUserDepartment = secondUser.get().getDepartment();
 
-        //TODO
-//        userRepo.changeDepartmentId(firstUser.get().getId(), secondUserDepartmentId);
-//        userRepo.changeDepartmentId(secondUser.get().getId(), firstUserDepartmentId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        userRepo.changeDepartment(firstUser.get().getId(), secondUserDepartment);
+        userRepo.changeDepartment(secondUser.get().getId(), firstUserDepartment);
+        return new ResponseEntity<>("Отделы заменены!", HttpStatus.OK);
     }
 }

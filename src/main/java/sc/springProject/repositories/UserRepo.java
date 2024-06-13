@@ -1,5 +1,6 @@
 package sc.springProject.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -9,7 +10,7 @@ import sc.springProject.entities.User;
 
 import java.util.List;
 
-public interface UserRepo extends CrudRepository<User, Long> {
+public interface UserRepo extends JpaRepository<User, Long> {
 
      List<User> findByName(String name);
 

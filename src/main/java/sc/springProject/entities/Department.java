@@ -11,21 +11,21 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "department")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
-    private long Id;
+    private long id;
 
-    private String department;
+    private String name;
 
     //@JsonBackReference
     @OneToMany(mappedBy = "department", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<User> users;
 
     public Department(String name) {
-        department = name;
+        this.name = name;
     }
 }

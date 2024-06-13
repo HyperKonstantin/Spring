@@ -1,21 +1,19 @@
 package sc.springProject.controllers;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import sc.springProject.configuration.EmbeddedPostgresConfiguration;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
@@ -35,11 +33,12 @@ import java.util.Optional;
 public class DatabaseQueryTest {
 
     @Autowired
-    @Lazy
+    private EntityManager entityManager;  // need for clear entity cache
+
+    @Autowired
     private UserRepo userRepo;
 
     @Autowired
-    @Lazy
     private DepartmentRepo departmentRepo;
 
     @Order(3)
@@ -76,14 +75,12 @@ public class DatabaseQueryTest {
     @Order(1)
     public void ChangeUserNameTest() throws Exception{
         log.info("ChangeUserNameTest Started!");
-        log.info("JSON: {}", (new ObjectMapper()).writeValueAsString(userRepo.findAll()));
         userRepo.changeName(1, "Konstantin");
-        log.info("JSON: {}", (new ObjectMapper()).writeValueAsString(userRepo.findAll()));
+
+        entityManager.clear();
         Optional<User> user = userRepo.findById(1L);
 
         Assert.assertFalse(user.isEmpty());
         Assert.assertEquals("Konstantin", user.get().getName());
-
-
     }
 }

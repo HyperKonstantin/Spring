@@ -1,6 +1,6 @@
 create table departments (
     id bigint not null,
-    department varchar(255),
+    name varchar(255),
     primary key (id)
 );
 
