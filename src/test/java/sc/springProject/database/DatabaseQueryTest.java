@@ -1,4 +1,4 @@
-package sc.springProject.controllers;
+package sc.springProject.database;
 
 
 import jakarta.persistence.EntityManager;
@@ -23,7 +23,6 @@ import sc.springProject.repositories.UserRepo;
 import java.util.List;
 import java.util.Optional;
 
-//@RunWith(SpringRunner.class)
 @DataJpaTest
 @ExtendWith(EmbeddedPostgresConfiguration.EmbeddedPostgresExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

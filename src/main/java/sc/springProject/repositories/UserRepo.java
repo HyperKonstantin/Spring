@@ -23,4 +23,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User SET name = ?2 WHERE id = ?1")
     void changeName(long userId, String name);
+
+    List<User> findByNameIsStartingWith(String name);
 }
