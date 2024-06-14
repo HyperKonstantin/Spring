@@ -13,7 +13,7 @@ public class UserDto {
 
     private int age;
 
-    private String phone;
+    private int salary;
 
     private String department;
 }

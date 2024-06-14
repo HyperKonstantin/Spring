@@ -12,7 +12,7 @@ public class DtoMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .age(user.getAge())
-                .phone(user.getPhone())
+                .salary(user.getSalary())
                 .department(user.getDepartment().getName())
                 .build();
     }

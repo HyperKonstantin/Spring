@@ -46,16 +46,16 @@ public class UserController {
 
     @Operation(
             summary = "Добавляет пользователя",
-            description = "Принимает параметры <strong>name, age</strong> и <strong>phone</strong> и возвращает пользователей с таким именем"
+            description = "Принимает параметры <strong>name, age</strong> и <strong>salary</strong> и создаёт пользователя"
     )
     @GetMapping("/add-user")
-    public ResponseEntity<?> addUser(@RequestParam String name, @RequestParam int age, @RequestParam String phone, @RequestParam long departmentId){
+    public ResponseEntity<?> addUser(@RequestParam String name, @RequestParam int age, @RequestParam int salary, @RequestParam long departmentId){
         Optional<Department> department = departmentRepo.findById(departmentId);
 
         if (department.isEmpty())
             return new ResponseEntity<>("указанный отдел отсутствует", HttpStatus.BAD_REQUEST);
 
-        User user = new User(name, age, phone, department.get());
+        User user = new User(name, age, salary, department.get());
         userRepo.save(user);
         return new ResponseEntity<>(dtoMapper.mapToUserDto(user), HttpStatus.OK);
     }

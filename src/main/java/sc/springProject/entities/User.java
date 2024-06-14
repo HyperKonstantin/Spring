@@ -22,17 +22,17 @@ public class User {
 
     private int age;
 
-    private String phone;
+    private int salary;
 
     //@JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "department")
     private Department department;
 
-    public User(String name, int age, String phone, Department department) {
+    public User(String name, int age, int salary, Department department) {
         this.name = name;
         this.age = age;
-        this.phone = phone;
+        this.salary = salary;
         this.department = department;
     }
 
