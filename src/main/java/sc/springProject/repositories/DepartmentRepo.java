@@ -1,8 +1,14 @@
 package sc.springProject.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 import sc.springProject.entities.Department;
 
-public interface DepartmentRepo extends CrudRepository<Department, Long> {
+import java.util.List;
+
+@Repository
+public interface DepartmentRepo extends JpaRepository<Department, Long> {
+
     Department findFirstById(long id);
+
 }

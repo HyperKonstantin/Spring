@@ -1,14 +1,16 @@
 package sc.springProject.repositories;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Long> {
 
@@ -25,4 +27,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
     void changeName(long userId, String name);
 
     List<User> findByNameIsStartingWith(String name);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<User> findById(long id);
+
 }
