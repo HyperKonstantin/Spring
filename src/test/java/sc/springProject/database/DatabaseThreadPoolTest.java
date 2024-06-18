@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sc.springProject.configuration.EmbeddedPostgresConfiguration;
 import sc.springProject.entities.Product;
 import sc.springProject.entities.User;
-import sc.springProject.repositories.DepartmentRepo;
-import sc.springProject.repositories.ProductRepo;
-import sc.springProject.repositories.UserRepo;
+import sc.springProject.repositories.DepartmentRepository;
+import sc.springProject.repositories.ProductRepository;
+import sc.springProject.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +38,18 @@ import static java.lang.Math.random;
 public class DatabaseThreadPoolTest {
 
     final int THREAD_TASKS_COUNT = 20;
-    final int COUNT_OF_THREADS = 1;
+    final int COUNT_OF_THREADS = 5;
     final long CHANGING_USER_ID = 1;
     final int INCREASING_SALARY_NUMBER = 100;
 
     @Autowired
-    private DepartmentRepo departmentRepo;
+    private DepartmentRepository departmentRepository;
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
     @Autowired
-    private ProductRepo productRepo;
+    private ProductRepository productRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -67,21 +67,21 @@ public class DatabaseThreadPoolTest {
         joinThreads(futures);
         executorService.shutdown();
 
-        Assert.assertEquals(THREAD_TASKS_COUNT, userRepo.findByNameIsStartingWith("User").size());
+        Assert.assertEquals(THREAD_TASKS_COUNT, userRepository.findByNameIsStartingWith("User").size());
     }
 
     public void addUser(){
         String username = "User" + (int)(random() * 1000);
         log.info("Creating {}...", username);
-        User user = new User(username, 20, 200, departmentRepo.findById(1L).get());
-        userRepo.save(user);
+        User user = new User(username, 20, 200, departmentRepository.findById(1L).get());
+        userRepository.save(user);
         log.info("{} created!!!", username);
     }
 
     @Test
     @Order(2)
     public void synchronizedChangeUserSalaryTest() {
-        int salaryBeforeIncreasing = userRepo.findById(CHANGING_USER_ID).get().getSalary();
+        int salaryBeforeIncreasing = userRepository.findById(CHANGING_USER_ID).get().getSalary();
         ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);
         List<Future> futures = runThreads(executorService, this::increaseSalary);
 
@@ -90,7 +90,7 @@ public class DatabaseThreadPoolTest {
         entityManager.clear();
 
         int expectedSalary = salaryBeforeIncreasing + THREAD_TASKS_COUNT * INCREASING_SALARY_NUMBER;
-        Assert.assertEquals(expectedSalary, userRepo.findById(CHANGING_USER_ID).get().getSalary());
+        Assert.assertEquals(expectedSalary, userRepository.findById(CHANGING_USER_ID).get().getSalary());
     }
 
 
@@ -108,9 +108,9 @@ public class DatabaseThreadPoolTest {
     public void increaseSalary(){
         int taskNum = (int)(random() * 100);
         log.info("Task {} started", taskNum);;
-        User user = userRepo.findById(CHANGING_USER_ID).get();
+        User user = userRepository.findFirstById(CHANGING_USER_ID).get();
         user.setSalary(user.getSalary() + INCREASING_SALARY_NUMBER);
-        userRepo.save(user);
+        userRepository.save(user);
         log.info("Task {} finished", taskNum);
     }
 
@@ -127,10 +127,9 @@ public class DatabaseThreadPoolTest {
     }
 
     @Test
-    @Transactional
     @Order(1)
     public void productTest(){
-        int priceBeforeIncreasing = productRepo.findFirstByName("apple").get().getPrice();
+        int priceBeforeIncreasing = productRepository.findByName("apple").get().getPrice();
         ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);
         List<Future> futures = runThreads(executorService, this::increaseProductPrice);
 
@@ -139,7 +138,7 @@ public class DatabaseThreadPoolTest {
         entityManager.clear();
 
         int expectedSalary = priceBeforeIncreasing + THREAD_TASKS_COUNT * 10;
-        Assert.assertEquals(expectedSalary, productRepo.findFirstByName("apple").get().getPrice());
+        Assert.assertEquals(expectedSalary, productRepository.findByName("apple").get().getPrice());
     }
 
     @Transactional
@@ -147,9 +146,9 @@ public class DatabaseThreadPoolTest {
         int taskNum = (int)(random() * 100);
         log.info("Task {} started", taskNum);
 
-        Product product = productRepo.findById(1L).get();
+        Product product = productRepository.findById(1L).get();
         product.setPrice(product.getPrice() + 10);
-        productRepo.save(product);
+        productRepository.save(product);
 
         log.info("Task {} finished", taskNum);
     }

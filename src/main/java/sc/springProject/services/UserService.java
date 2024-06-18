@@ -100,7 +100,7 @@ public class UserService {
 
     @Transactional("transactionManagerName")
     public void increaseSalary(){
-        User user = userRepository.findWithLockingById(1L).get();
+        User user = userRepository.findById(1L).get();
         user.setSalary(user.getSalary() + 100);
         userRepository.save(user);
     }
