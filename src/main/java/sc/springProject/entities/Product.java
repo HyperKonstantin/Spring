@@ -3,6 +3,7 @@ package sc.springProject.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+@ToString
 @Entity
 @Data
 @Table(name = "products")

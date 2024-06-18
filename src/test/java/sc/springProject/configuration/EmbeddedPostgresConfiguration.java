@@ -9,16 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import sc.springProject.entities.User;
-import sc.springProject.repositories.UserRepo;
+import sc.springProject.repositories.UserRepository;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.Locale;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = UserRepo.class)
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @EntityScan(basePackageClasses = User.class)
 public class EmbeddedPostgresConfiguration {
     private static EmbeddedPostgres embeddedPostgres;

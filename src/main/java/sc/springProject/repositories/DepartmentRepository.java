@@ -4,10 +4,8 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import sc.springProject.entities.Department;
 
-import java.util.List;
-
 @Repository
-public interface DepartmentRepo extends JpaRepository<Department, Long> {
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     Department findFirstById(long id);
 

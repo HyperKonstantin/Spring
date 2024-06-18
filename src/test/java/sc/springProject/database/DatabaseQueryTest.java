@@ -17,8 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import sc.springProject.configuration.EmbeddedPostgresConfiguration;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
-import sc.springProject.repositories.DepartmentRepo;
-import sc.springProject.repositories.UserRepo;
+import sc.springProject.repositories.DepartmentRepository;
+import sc.springProject.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +35,10 @@ public class DatabaseQueryTest {
     private EntityManager entityManager;  // need for clear entity cache
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    private DepartmentRepo departmentRepo;
+    private DepartmentRepository departmentRepo;
 
     @Order(3)
     @Test
@@ -53,6 +53,7 @@ public class DatabaseQueryTest {
     @Order(2)
     public void findUserByNameTest() throws Exception{
         log.info("findUserByNameTest Started!");
+
         List<User> users = userRepo.findByName("Kostya");
 
         Assert.assertEquals(1, users.size());
@@ -63,23 +64,24 @@ public class DatabaseQueryTest {
     @Order(4)
     public void ChangeUserDepartmentTest() throws Exception{
         log.info("ChangeUserDepartmentTest Started!");
-        Department department = departmentRepo.findFirstById(2);
-        userRepo.changeDepartment(1, department);
-        User user = userRepo.findById(1L).get();
 
-        Assert.assertEquals(2, user.getDepartment().getId());
+        Department department = departmentRepo.findFirstById(2);
+        User user = userRepo.findById(1).get();
+        user.setDepartment(department);
+        userRepo.save(user);
+
+        Assert.assertEquals(2, userRepo.findById(1L).get().getDepartment().getId());
     }
 
     @Test
     @Order(1)
     public void ChangeUserNameTest() throws Exception{
         log.info("ChangeUserNameTest Started!");
-        userRepo.changeName(1, "Konstantin");
 
-        entityManager.clear();
-        Optional<User> user = userRepo.findById(1L);
+        User user = userRepo.findById(1).get();
+        user.setName("Konstantin");
+        userRepo.save(user);
 
-        Assert.assertFalse(user.isEmpty());
-        Assert.assertEquals("Konstantin", user.get().getName());
+        Assert.assertEquals("Konstantin", userRepo.findById(1L).get().getName());
     }
 }

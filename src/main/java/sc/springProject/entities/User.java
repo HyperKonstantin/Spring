@@ -1,9 +1,7 @@
 package sc.springProject.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Users")
@@ -24,8 +22,7 @@ public class User {
 
     private int salary;
 
-    //@JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department")
     private Department department;
 

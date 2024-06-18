@@ -5,43 +5,36 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.hibernate.engine.spi.ManagedEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sc.springProject.dto.UserDto;
-import sc.springProject.repositories.DepartmentRepo;
+import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
-import sc.springProject.repositories.UserRepo;
+import sc.springProject.repositories.UserRepository;
 import sc.springProject.services.DtoMapper;
+import sc.springProject.services.UserService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Tag(name = "UserQuery", description = "работает с данными пользователя")
 @CrossOrigin
 @RestController
-@AllArgsConstructor
 public class UserController {
 
-    private UserRepo userRepo;
+    @Autowired
+    private UserService userService;
 
-    private DepartmentRepo departmentRepo;
-
-    private DtoMapper dtoMapper;
-
-    private EntityManager entityManager;
 
     @Operation(
             summary = "Возвращает присок пользователей"
     )
     @GetMapping("/get-users")
     public ResponseEntity<?> getUsers(){
-        List<User> users = userRepo.findAll();
-        List<UserDto> usersDto = users.stream().map(dtoMapper::mapToUserDto).toList();
-        return new ResponseEntity<>(usersDto, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @Operation(
@@ -50,14 +43,13 @@ public class UserController {
     )
     @GetMapping("/add-user")
     public ResponseEntity<?> addUser(@RequestParam String name, @RequestParam int age, @RequestParam int salary, @RequestParam long departmentId){
-        Optional<Department> department = departmentRepo.findById(departmentId);
+        UserDto userDto = userService.newUser(name, age, salary, departmentId);
 
-        if (department.isEmpty())
+        if (userDto == null){
             return new ResponseEntity<>("указанный отдел отсутствует", HttpStatus.BAD_REQUEST);
+        }
 
-        User user = new User(name, age, salary, department.get());
-        userRepo.save(user);
-        return new ResponseEntity<>(dtoMapper.mapToUserDto(user), HttpStatus.OK);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @Operation(
@@ -66,8 +58,7 @@ public class UserController {
     )
     @GetMapping("/find-user")
     public ResponseEntity<?> findUser(@RequestParam String name) {
-        List<UserDto> usersDto = userRepo.findByName(name).stream().map(dtoMapper::mapToUserDto).toList();
-        return new ResponseEntity<>(usersDto, HttpStatus.OK);
+        return new ResponseEntity<>(userService.findUserByName(name), HttpStatus.OK);
     }
 
     @Operation(
@@ -76,13 +67,13 @@ public class UserController {
     )
     @GetMapping("/delete-user")
     public ResponseEntity<?> deleteUser(@RequestParam long id){
-        Optional<User> user = userRepo.findById(id);
+        UserDto userDto = userService.deleteUser(id);
 
-        if (user.isEmpty())
+        if (userDto == null){
             return new ResponseEntity<>("Такого пользователя нет", HttpStatus.BAD_REQUEST);
+        }
 
-        userRepo.deleteById(id);
-        return new ResponseEntity<>(dtoMapper.mapToUserDto(user.get()), HttpStatus.OK);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @Operation(
@@ -92,14 +83,19 @@ public class UserController {
     @Transactional
     @GetMapping("/change-user-name")
     public ResponseEntity<?> changeUserName(@RequestParam long id, @RequestParam String name){
+        UserDto userDto = userService.changeName(id, name);
 
-        if (userRepo.findById(id).isEmpty()){
+        if (userDto == null){
             return new ResponseEntity<>("Пользователя с таким id нет!", HttpStatus.OK);
         }
 
-        userRepo.changeName(id, name);
-        entityManager.clear();
-        UserDto userDto = dtoMapper.mapToUserDto(userRepo.findById(id).get());
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/lockingUpdate")
+    public ResponseEntity<?> lockingUpdateUser(){
+        UserDto userDto = userService.LockingUpdateUser();
+
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 

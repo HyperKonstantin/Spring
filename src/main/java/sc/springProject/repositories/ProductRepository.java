@@ -7,10 +7,10 @@ import sc.springProject.entities.Product;
 
 import java.util.Optional;
 
-public interface ProductRepo extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findFirstByName(String name);
+    Optional<Product> findByName(String name);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<Product> findById(Long id);
+    Optional<Product> findWithLockingById(long id);
 }
