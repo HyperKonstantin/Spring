@@ -13,6 +13,7 @@ public class DtoMapper {
                 .name(user.getName())
                 .age(user.getAge())
                 .salary(user.getSalary())
+                .averageDepartmentSalary(user.getAverageDepartmentSalary())
                 .department(user.getDepartment().getName())
                 .build();
     }

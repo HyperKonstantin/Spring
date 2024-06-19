@@ -65,7 +65,7 @@ public class DatabaseQueryTest {
     public void ChangeUserDepartmentTest() throws Exception{
         log.info("ChangeUserDepartmentTest Started!");
 
-        Department department = departmentRepo.findFirstById(2);
+        Department department = departmentRepo.findById(2).get();
         User user = userRepo.findById(1).get();
         user.setDepartment(department);
         userRepo.save(user);

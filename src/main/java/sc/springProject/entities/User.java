@@ -23,7 +23,10 @@ public class User {
 
     private int salary;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "average_department_salary")
+    private Double averageDepartmentSalary;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department")
     private Department department;
 

@@ -22,8 +22,11 @@ public class Department {
     private String name;
 
     //@JsonBackReference
-    @OneToMany(mappedBy = "department", cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "department", cascade=CascadeType.ALL, orphanRemoval=true, fetch = FetchType.EAGER)
     private List<User> users;
+
+    @Column(name = "average_salary")
+    private Double averageSalary;
 
     public Department(String name) {
         this.name = name;

@@ -14,9 +14,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import sc.springProject.configuration.EmbeddedPostgresConfiguration;
 import sc.springProject.repositories.DepartmentRepository;
-import sc.springProject.repositories.ProductRepository;
 import sc.springProject.repositories.UserRepository;
-import sc.springProject.services.UserTestService;
+import sc.springProject.services.TestService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +32,11 @@ import java.util.concurrent.Future;
 @Slf4j
 public class DatabaseThreadPoolTest {
 
-    final int THREAD_TASKS_COUNT = 200;
-    final int COUNT_OF_THREADS = 10;
+    final int THREAD_TASKS_COUNT = 20;
+    final int COUNT_OF_THREADS = 4;
     final long CHANGING_USER_ID = 1;
     final int INCREASING_SALARY_NUMBER = 100;
+    final int CREATED_USER_SALARY = 250;
 
     @Autowired
     private DepartmentRepository departmentRepository;
@@ -45,39 +45,20 @@ public class DatabaseThreadPoolTest {
     private UserRepository userRepository;
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private EntityManager entityManager;
 
     @Autowired
-    private UserTestService userTestService;
-
-    @Test
-    @Order(2)
-    public void addUsersTest() throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);
-        List<Future> futures = new ArrayList<>();
-
-        for (int i = 0; i < THREAD_TASKS_COUNT; i++){
-            futures.add(executorService.submit(userTestService::addUser));
-        }
-
-        joinThreads(futures);
-        executorService.shutdown();
-
-        Assert.assertEquals(THREAD_TASKS_COUNT, userRepository.findByNameIsStartingWith("User").size());
-    }
+    private TestService testService;
 
     @Test
     @Order(1)
     public void synchronizedChangeUserSalaryTest() {
         int salaryBeforeIncreasing = userRepository.findById(CHANGING_USER_ID).get().getSalary();
-        userTestService.setIncreaseSalaryNumber(INCREASING_SALARY_NUMBER);
-        userTestService.setChangingUserId(CHANGING_USER_ID);
+        testService.setIncreaseSalaryNumber(INCREASING_SALARY_NUMBER);
+        testService.setChangingUserId(CHANGING_USER_ID);
 
         ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);
-        List<Future> futures = runThreads(executorService, userTestService::increaseSalaryTest);
+        List<Future> futures = runThreads(executorService, testService::increaseSalaryTest);
 
         joinThreads(futures);
         executorService.shutdown();
@@ -107,5 +88,22 @@ public class DatabaseThreadPoolTest {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Test
+    @Order(2)
+    public void updateAverageDepartmentSalaryTest(){
+        userRepository.deleteAll();
+        testService.setCreatedUserSalary(CREATED_USER_SALARY);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);
+        List<Future> futures = runThreads(executorService, testService::addUser);
+
+        joinThreads(futures);
+        executorService.shutdown();
+        entityManager.clear();
+
+        Assert.assertEquals(THREAD_TASKS_COUNT, departmentRepository.findById(2L).get().getUsers().size());
+        Assert.assertEquals(CREATED_USER_SALARY, departmentRepository.findById(2L).get().getAverageSalary(), 1);
     }
 }

@@ -20,6 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(long id);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<User> findFirstById(long id);
+    Optional<User> findWithLockingById(long id);
 
 }

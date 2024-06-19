@@ -15,5 +15,7 @@ public class UserDto {
 
     private int salary;
 
+    private double averageDepartmentSalary;
+
     private String department;
 }
