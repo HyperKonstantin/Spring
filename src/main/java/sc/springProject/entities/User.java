@@ -8,7 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class User {
 
     @Id

@@ -4,11 +4,10 @@ import com.opentable.db.postgres.embedded.EmbeddedPostgres;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import sc.springProject.entities.User;
 import sc.springProject.repositories.UserRepository;
 
@@ -18,6 +17,7 @@ import java.io.IOException;
 @Configuration
 @EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @EntityScan(basePackageClasses = User.class)
+@ComponentScan(basePackages = {"sc.springProject.services"})
 public class EmbeddedPostgresConfiguration {
     private static EmbeddedPostgres embeddedPostgres;
 

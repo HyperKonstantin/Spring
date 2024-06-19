@@ -91,12 +91,4 @@ public class UserController {
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
-
-    @GetMapping("/lockingUpdate")
-    public ResponseEntity<?> lockingUpdateUser(){
-        UserDto userDto = userService.LockingUpdateUser();
-
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-    }
-
 }

@@ -3,6 +3,7 @@ package sc.springProject.services;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.concurrent.Executors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private UserRepository userRepository;
@@ -76,33 +78,4 @@ public class UserService {
 
         return dtoMapper.mapToUserDto(user);
     }
-
-
-
-
-
-
-    public UserDto LockingUpdateUser(){
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-
-        for (int i = 0; i < 20; i++){
-            executorService.execute(this::increaseSalary);
-        }
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        executorService.shutdown();
-
-        return dtoMapper.mapToUserDto(userRepository.findById(1L).get());
-    }
-
-    @Transactional("transactionManagerName")
-    public void increaseSalary(){
-        User user = userRepository.findById(1L).get();
-        user.setSalary(user.getSalary() + 100);
-        userRepository.save(user);
-    }
-
 }
