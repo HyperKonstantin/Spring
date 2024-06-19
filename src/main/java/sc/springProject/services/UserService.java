@@ -14,6 +14,7 @@ import sc.springProject.entities.User;
 import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.repositories.UserRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +24,8 @@ import java.util.concurrent.Executors;
 @AllArgsConstructor
 @Slf4j
 public class UserService {
+
+    private EntityManager entityManager;
 
     private UserRepository userRepository;
 
@@ -35,6 +38,7 @@ public class UserService {
         return users.stream().map(dtoMapper::mapToUserDto).toList();
     }
 
+    @Transactional
     public UserDto newUser(String name, int age, int salary, long departmentId){
         Optional<Department> department = departmentRepository.findById(departmentId);
 
@@ -43,9 +47,20 @@ public class UserService {
         }
 
         User user = new User(name, age, salary, department.get());
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+        entityManager.clear();
+        updateDepartmentAverageSalary(departmentId);
 
         return dtoMapper.mapToUserDto(user);
+    }
+
+    public void updateDepartmentAverageSalary(long departmentId){
+        Department department = departmentRepository.findWithLockingById(departmentId).get();
+
+        int[] usersSalaries = department.getUsers().stream().mapToInt(User::getSalary).toArray();
+        department.setAverageSalary(Arrays.stream(usersSalaries).average().getAsDouble());
+
+        departmentRepository.save(department);
     }
 
     public List<UserDto> findUserByName(String name){

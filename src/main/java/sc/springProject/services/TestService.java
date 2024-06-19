@@ -22,6 +22,9 @@ public class TestService {
     private UserRepository userRepository;
 
     @NonNull
+    private UserService userService;
+
+    @NonNull
     private DepartmentRepository departmentRepository;
 
     @NonNull
@@ -60,11 +63,7 @@ public class TestService {
         userRepository.saveAndFlush(user);
         entityManager.clear();
 
-        Department department = departmentRepository.findWithLockingById(2L).get();
-        int[] usersSalaries = department.getUsers().stream().mapToInt(User::getSalary).toArray();
-        department.setAverageSalary(Arrays.stream(usersSalaries).average().getAsDouble());
-
-        departmentRepository.save(department);
+        userService.updateDepartmentAverageSalary(2L);
         log.info("{} created!!!", username);
     }
 }
