@@ -93,7 +93,6 @@ public class DatabaseThreadPoolTest {
     @Test
     @Order(2)
     public void updateAverageDepartmentSalaryTest(){
-        userRepository.deleteAll();
         testService.setCreatedUserSalary(CREATED_USER_SALARY);
 
         ExecutorService executorService = Executors.newFixedThreadPool(COUNT_OF_THREADS);

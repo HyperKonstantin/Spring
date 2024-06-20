@@ -38,7 +38,7 @@ public class UserService {
         return users.stream().map(dtoMapper::mapToUserDto).toList();
     }
 
-    @Transactional
+
     public UserDto newUser(String name, int age, int salary, long departmentId){
         Optional<Department> department = departmentRepository.findById(departmentId);
 
@@ -54,6 +54,7 @@ public class UserService {
         return dtoMapper.mapToUserDto(user);
     }
 
+    @Transactional
     public void updateDepartmentAverageSalary(long departmentId){
         Department department = departmentRepository.findWithLockingById(departmentId).get();
 

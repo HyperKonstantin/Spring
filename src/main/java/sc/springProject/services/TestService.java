@@ -49,7 +49,6 @@ public class TestService {
         log.info("Task {} finished", taskNum);
     }
 
-    @Transactional
     public void addUser(){
         String username = "User" + (int)(random() * 1000);
         log.info("Creating {}...", username);
