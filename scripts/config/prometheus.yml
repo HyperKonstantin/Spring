@@ -1,6 +1,12 @@
 scrape_configs:
-  - job_name: 'sample_monitoring'
+  - job_name: 'spring_monitoring'
     scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['192.168.246.105:8080']
+
+  - job_name: 'postgres_monitoring'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [ '192.168.246.105:9187' ]

@@ -5,3 +5,10 @@
     команда для полного перезапуска в случае ошибок: [docker compose up -d --force-recreate]
     для получения ip адреса prometeus при добавлении его в grafana команда [docker inspect <container id>]
     id контейнера получить командой [docker container ls]
+
+    для подключения postgresql нужен postgres_exporter. Команды для загрузки:
+    [wget https://github.com/prometheus-community/postgres_exporter/releases/download/v0.9.0/postgres_exporter-0.9.0.linux-amd64.tar.gz]
+    [tar xvfz postgres_exporter-*.linux-amd64.tar.gz]
+    [cd postgres_exporter-*.linux-amd64]
+    [export DATA_SOURCE_NAME='postgresql://ccs:ccs@192.168.246.64:6432/test?sslmode=disable']
+    [./postgres_exporter] - запуск postgres_exporter.
