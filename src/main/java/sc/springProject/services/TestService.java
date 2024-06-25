@@ -18,17 +18,10 @@ import static java.lang.Math.random;
 @Slf4j
 public class TestService {
 
-    @NonNull
-    private UserRepository userRepository;
-
-    @NonNull
-    private UserService userService;
-
-    @NonNull
-    private DepartmentRepository departmentRepository;
-
-    @NonNull
-    private EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final DepartmentRepository departmentRepository;
+    private final EntityManager entityManager;
 
     @Setter
     private int increaseSalaryNumber;

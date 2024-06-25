@@ -2,5 +2,5 @@ spring:
   flyway.enabled: true
   flyway:
     locations:
-    - filesystem:/home/konstantin/projects/SpringProject/src/test/resources/migration
-    - filesystem:/home/konstantin/projects/SpringProject/src/main/resources/migration
+    - filesystem:src/test/resources/migration
+    - filesystem:src/main/resources/migration

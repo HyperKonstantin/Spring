@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "Departments")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Department {

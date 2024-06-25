@@ -1,11 +1,17 @@
 package sc.springProject.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sc.springProject.dto.UserDto;
@@ -14,24 +20,36 @@ import sc.springProject.entities.User;
 import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.Math.random;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class UserService {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
+    private final DtoMapper dtoMapper;
+    private final MeterRegistry meterRegistry;
 
-    private UserRepository userRepository;
+    private AtomicInteger transactionExeptionCount;
 
-    private DepartmentRepository departmentRepository;
-
-    private DtoMapper dtoMapper;
+    @PostConstruct
+    public void init(){
+        transactionExeptionCount = new AtomicInteger();
+        transactionExeptionCount.set(0);
+        meterRegistry.gauge("TransactionExceptionCounter", transactionExeptionCount);
+    }
 
     public List<UserDto> getAllUsers(){
         List<User> users = userRepository.findAll();
@@ -40,6 +58,7 @@ public class UserService {
 
 
     public UserDto newUser(String name, int age, int salary, long departmentId){
+        transactionExeptionCount.incrementAndGet();
         Optional<Department> department = departmentRepository.findById(departmentId);
 
         if (department.isEmpty()){
@@ -94,4 +113,44 @@ public class UserService {
 
         return dtoMapper.mapToUserDto(user);
     }
+
+    @SneakyThrows
+    @Transactional
+    public void stressTest(){
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        List<Future> futures = new ArrayList<>();
+
+
+        for (int i = 0; i < 30; i++){
+            futures.add(executorService.submit(this::addUser));
+        }
+
+        for (Future future : futures){
+            future.get();
+        }
+        executorService.shutdown();
+    }
+
+    public void addUser(){
+        String username = "User" + (int)(random() * 1000);
+        log.info("Creating {}...", username);
+
+        User user = User.builder()
+                .name(username)
+                .age(20)
+                .salary(250)
+                .department(departmentRepository.findById(52L).get())
+                .build();
+        userRepository.saveAndFlush(user);
+        entityManager.clear();
+
+        try {
+            updateDepartmentAverageSalary(52L);
+        }
+        catch (ObjectOptimisticLockingFailureException e){
+            log.info("Locked ({})", username);
+        }
+        log.info("{} created!!!", username);
+    }
+
 }

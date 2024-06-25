@@ -7,6 +7,7 @@ import lombok.*;
 @Table(name = "Users")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -29,6 +30,9 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department")
     private Department department;
+
+    @Version
+    private long version;
 
     public User(String name, int age, int salary, Department department) {
         this.name = name;
