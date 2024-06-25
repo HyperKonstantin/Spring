@@ -40,25 +40,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final DtoMapper dtoMapper;
-    private final MeterRegistry meterRegistry;
-
-    private AtomicInteger transactionExeptionCount;
-
-    @PostConstruct
-    public void init(){
-        transactionExeptionCount = new AtomicInteger();
-        transactionExeptionCount.set(0);
-        meterRegistry.gauge("TransactionExceptionCounter", transactionExeptionCount);
-    }
 
     public List<UserDto> getAllUsers(){
         List<User> users = userRepository.findAll();
         return users.stream().map(dtoMapper::mapToUserDto).toList();
     }
 
-
+    @Transactional
     public UserDto newUser(String name, int age, int salary, long departmentId){
-        transactionExeptionCount.incrementAndGet();
         Optional<Department> department = departmentRepository.findById(departmentId);
 
         if (department.isEmpty()){
@@ -73,7 +62,6 @@ public class UserService {
         return dtoMapper.mapToUserDto(user);
     }
 
-    @Transactional
     public void updateDepartmentAverageSalary(long departmentId){
         Department department = departmentRepository.findWithLockingById(departmentId).get();
 
@@ -95,7 +83,10 @@ public class UserService {
             return null;
         }
 
-        userRepository.deleteById(id);
+        User user = userOptional.get();
+        user.dismissDepartment();
+        userRepository.delete(user);
+
 
         return dtoMapper.mapToUserDto(userOptional.get());
     }

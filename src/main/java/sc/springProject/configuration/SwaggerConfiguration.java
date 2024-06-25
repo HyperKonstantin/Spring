@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfiguration {
 
     @Bean
     public OpenAPI api() {

@@ -1,5 +1,6 @@
 package sc.springProject.controllers;
 
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
@@ -32,6 +33,7 @@ public class UserController {
     @Operation(
             summary = "Возвращает присок пользователей"
     )
+    @Timed("GetUsersRequest")
     @GetMapping("/get-users")
     public ResponseEntity<?> getUsers(){
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);

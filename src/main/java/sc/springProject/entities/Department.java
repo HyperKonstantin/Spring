@@ -23,7 +23,7 @@ public class Department {
     private String name;
 
     //@JsonBackReference
-    @OneToMany(mappedBy = "department", cascade=CascadeType.ALL, orphanRemoval=true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade=CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
     private List<User> users;
 
     @Column(name = "average_salary")

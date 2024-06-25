@@ -15,8 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByDepartment(Department department);
 
-    List<User> findByNameIsStartingWith(String name);
-
     Optional<User> findById(long id);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

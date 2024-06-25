@@ -31,9 +31,6 @@ public class User {
     @JoinColumn(name = "department")
     private Department department;
 
-    @Version
-    private long version;
-
     public User(String name, int age, int salary, Department department) {
         this.name = name;
         this.age = age;
@@ -41,5 +38,7 @@ public class User {
         this.department = department;
     }
 
-
+    public void dismissDepartment(){
+        department.getUsers().remove(this);
+    }
 }
