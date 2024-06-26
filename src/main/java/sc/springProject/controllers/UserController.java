@@ -3,23 +3,13 @@ package sc.springProject.controllers;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sc.springProject.dto.UserDto;
-import sc.springProject.repositories.DepartmentRepository;
-import sc.springProject.entities.Department;
-import sc.springProject.entities.User;
-import sc.springProject.repositories.UserRepository;
-import sc.springProject.services.DtoMapper;
 import sc.springProject.services.UserService;
-
-import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "UserQuery", description = "работает с данными пользователя")
 @CrossOrigin
@@ -92,5 +82,10 @@ public class UserController {
         }
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/send-user-id")
+    public ResponseEntity<?> sendUserId(@RequestParam long id){
+        return userService.sendIdToNatsListener(id);
     }
 }

@@ -12,3 +12,8 @@
     [cd postgres_exporter-*.linux-amd64]
     [export DATA_SOURCE_NAME='postgresql://ccs:ccs@192.168.246.64:6432/test?sslmode=disable']
     [./postgres_exporter] - запуск postgres_exporter.
+
+    для запуска локального сервера Nats: [nats-server]
+
+    для запуска проекта через докер нужно создать образ в директории с Dockerfile [docker build -t <image name> .]
+    и запустить контейнер [docker run -p <output port>:<application port> <image name>]

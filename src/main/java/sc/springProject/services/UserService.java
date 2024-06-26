@@ -1,11 +1,8 @@
 package sc.springProject.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.core.instrument.MeterRegistry;
-import jakarta.annotation.PostConstruct;
+import io.nats.client.Message;
+import io.nats.client.impl.NatsMessage;
 import jakarta.persistence.EntityManager;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +15,7 @@ import sc.springProject.dto.UserDto;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
 import sc.springProject.repositories.DepartmentRepository;
+import sc.springProject.repositories.NatsRepository;
 import sc.springProject.repositories.UserRepository;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Math.random;
 
@@ -35,9 +32,11 @@ import static java.lang.Math.random;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private final String NATS_SUBJECT = "info.user";
 
     private final EntityManager entityManager;
     private final UserRepository userRepository;
+    private final NatsRepository natsRepository;
     private final DepartmentRepository departmentRepository;
     private final DtoMapper dtoMapper;
 
@@ -144,4 +143,11 @@ public class UserService {
         log.info("{} created!!!", username);
     }
 
+    public ResponseEntity<?> sendIdToNatsListener(long id) {
+        natsRepository.send(String.valueOf(id), "info.user");
+        log.info("Sending message: {}", id);
+
+        Message response = natsRepository.getResponce();
+        return new ResponseEntity<>(new String(response.getData()), HttpStatus.OK) ;
+    }
 }
