@@ -3,6 +3,7 @@ package sc.springProject.repositories;
 import io.nats.client.*;
 import io.nats.client.impl.NatsMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,9 +14,9 @@ public class NatsRepository {
     private Connection natsConnection;
     private Subscription subscription;
 
-    public NatsRepository() {
+    public NatsRepository(Environment environment) {
         try {
-            natsConnection = Nats.connect("192.168.246.64:4222");
+            natsConnection = Nats.connect(environment.getProperty("values.nats.host"));
         } catch (Exception e) {
             log.error("--- Не удалось подключиться к NATS-серверу ---");
             throw new RuntimeException(e);

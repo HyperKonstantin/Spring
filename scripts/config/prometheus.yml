@@ -10,3 +10,9 @@ scrape_configs:
     metrics_path: '/metrics'
     static_configs:
       - targets: [ '192.168.246.105:9187' ]
+
+  - job_name: 'jmeter_monitoring'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [ '192.168.246.105:9270' ]

@@ -1,4 +1,4 @@
-подключение grafana, prometheus:
+подключения
 
     за подключение отвечает папка scripts.
     docker запускается командой [docker compose up --build] из папки scripts
@@ -17,3 +17,16 @@
 
     для запуска проекта через докер нужно создать образ в директории с Dockerfile [docker build -t <image name> .]
     и запустить контейнер [docker run -p <output port>:<application port> <image name>]
+
+    запуск jmeter из консоли (из папки с .sh файлом)
+     [./jmeter.sh -n -t <path + test filename> -l <path + log filename> -e -o <path + result filename>]
+
+Порты:
+
+8080 - SpringProjectApplication
+8081 - NatsListener
+9090 - Prometheus
+3000 - Grafana
+4222 - Nats (local)
+192.168.246.64:4222 - Nats (Server)
+http://192.168.246.64:9187 - postgres-exporter
