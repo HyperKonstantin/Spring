@@ -88,6 +88,11 @@
 			<version>2.19.0</version>
 		</dependency>
 
+		<dependency> <!-- Kafka -->
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

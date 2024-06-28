@@ -1,7 +1,5 @@
 package sc.springProject.services;
 
-import io.nats.client.Message;
-import io.nats.client.impl.NatsMessage;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -14,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import sc.springProject.dto.UserDto;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
+import sc.springProject.kafka.KafkaProducer;
 import sc.springProject.repositories.DepartmentRepository;
-import sc.springProject.repositories.NatsRepository;
 import sc.springProject.repositories.UserRepository;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class UserService {
 
     private final EntityManager entityManager;
     private final UserRepository userRepository;
-    private final NatsRepository natsRepository;
+    private final KafkaProducer kafkaProducer;
     private final DepartmentRepository departmentRepository;
     private final DtoMapper dtoMapper;
 
@@ -144,10 +142,9 @@ public class UserService {
     }
 
     public ResponseEntity<?> sendIdToNatsListener(long id) {
-        natsRepository.send(String.valueOf(id), "info.user");
+        kafkaProducer.sendMessage(String.valueOf(id));
         log.info("Sending message: {}", id);
 
-        Message response = natsRepository.getResponce();
-        return new ResponseEntity<>(new String(response.getData()), HttpStatus.OK) ;
+        return new ResponseEntity<>(HttpStatus.OK) ;
     }
 }

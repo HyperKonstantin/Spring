@@ -23,10 +23,32 @@
 
 Порты:
 
-8080 - SpringProjectApplication
-8081 - NatsListener
-9090 - Prometheus
-3000 - Grafana
-4222 - Nats (local)
-192.168.246.64:4222 - Nats (Server)
-http://192.168.246.64:9187 - postgres-exporter
+    8080 - SpringProjectApplication
+    8081 - NatsListener
+    9090 - Prometheus
+    3000 - Grafana
+    4222 - Nats (local)
+    9092 - Kafka
+    192.168.246.64:4222 - Nats (Server)
+    http://192.168.246.64:9187 - postgres-exporter
+
+Kafka: (https://habr.com/ru/companies/slurm/articles/719540/)
+    запуск:
+    запуск zookeeper - [./bin/zookeeper-server-start.sh config/zookeeper.properties]
+    запуск kafka - [./bin/kafka-server-start.sh config/server.properties]
+    создать топик - [./bin/kafka-topics.sh --create --topic <topic name> --bootstrap-server localhost:9092]
+    информация о топике - [./bin/kafka-topics.sh --describe --topic <topic name> --bootstrap-server localhost:9092]
+
+    консоль Kafka-Producer - [./bin/kafka-console-producer.sh --topic <topic name> --bootstrap-server localhost:9092]
+
+    консоль Kafka-Consumer - [./bin/kafka-console-consumer.sh --topic <topic name> --bootstrap-server localhost:9092]
+    Доп. свойства (дописываются в конце команды):
+        - чтение записей, отправленных до входа consumer: --consumer-property auto.offset.reset=earliest (shortcut: --from-beginning)
+        - задать группу: --group <group name>
+
+
+
+
+
+
+
