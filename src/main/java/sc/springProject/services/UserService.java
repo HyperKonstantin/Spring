@@ -44,14 +44,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto newUser(String name, int age, int salary, long departmentId){
+    public UserDto newUser(User user, long departmentId){
         Optional<Department> department = departmentRepository.findById(departmentId);
 
         if (department.isEmpty()){
             return null;
         }
 
-        User user = new User(name, age, salary, department.get());
+        user.setDepartment(department.get());
         userRepository.saveAndFlush(user);
         entityManager.clear();
         updateDepartmentAverageSalary(departmentId);
