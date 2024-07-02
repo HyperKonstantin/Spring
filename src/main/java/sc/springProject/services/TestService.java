@@ -5,12 +5,10 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
 import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.repositories.UserRepository;
 
-import java.util.Arrays;
 import static java.lang.Math.random;
 
 @Service

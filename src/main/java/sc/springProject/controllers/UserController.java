@@ -39,7 +39,6 @@ public class UserController {
     )
     @PostMapping("/add/{id}")
     public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable("id") long departmentId){
-        log.info("User JSON: {}", user);
         UserDto userDto = userService.newUser(user, departmentId);
 
         if (userDto == null){

@@ -7,12 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sc.springProject.dto.UserDto;
 
+import sc.springProject.entities.Department;
 import sc.springProject.services.DepartmentService;
 
 import java.util.List;
@@ -21,20 +19,21 @@ import java.util.List;
 @Tag(name = "DepartmentQuery", description = "запросы с отделами")
 @RestController
 @CrossOrigin
+@RequestMapping("/department")
 public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
 
     @Operation(summary = "Возвращает все отделы")
-    @GetMapping("/get-departments")
+    @GetMapping("/get")
     public ResponseEntity<?> getDepartments(){
         return new ResponseEntity<>(departmentService.getAllDepartments(), HttpStatus.OK);
     }
 
     @Operation(summary = "Находит всех сотрудников отдела по его id")
-    @GetMapping("/find-by-department-id")
-    public ResponseEntity<?> FindUserByDepartmentId(@RequestParam long departmentId){
+    @GetMapping("/find-users")
+    public ResponseEntity<?> FindUserByDepartmentId(@RequestParam("id") long departmentId){
         List<UserDto> usersDto = departmentService.getAllUsersFromDepartment(departmentId);
 
         if (usersDto == null) {
@@ -45,9 +44,10 @@ public class DepartmentController {
     }
 
     @Operation(summary = "Добавляет отдел")
-    @GetMapping("/add-department")
-    public ResponseEntity<?> addDepartment(@RequestParam String name){
-        return new ResponseEntity<>(departmentService.addNewDepartment(name), HttpStatus.OK);
+    @PostMapping("/add")
+    public ResponseEntity<?> addDepartment(@RequestBody Department department){
+        departmentService.addNewDepartment(department);
+        return new ResponseEntity<>(department, HttpStatus.CREATED);
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class DepartmentController {
             departmentService.swapUserDepartments(firstUserId, secondUserId);
         }
         catch (IllegalArgumentException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Отделы заменены!", HttpStatus.OK);
     }

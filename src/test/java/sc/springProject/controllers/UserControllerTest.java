@@ -1,6 +1,5 @@
 package sc.springProject.controllers;
 
-import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -12,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.shaded.org.bouncycastle.cert.ocsp.Req;
 
 import java.nio.charset.StandardCharsets;
 
@@ -33,7 +30,7 @@ public class UserControllerTest {
 
     @Test
     @Order(1)
-    public void getUsers_returnUsers() throws Exception {
+    public void getUsers_returnsUsers() throws Exception {
         RequestBuilder requestBuilder = get("/user/get");
 
         mockMvc.perform(requestBuilder)
@@ -43,7 +40,7 @@ public class UserControllerTest {
 
     @Test
     @Order(2)
-    public void addUser_validDepartmentId_returnCreatedUser() throws Exception {
+    public void addUser_validDepartmentId_returnsCreatedUser() throws Exception {
         RequestBuilder requestBuilder = post("/user/add/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -71,7 +68,7 @@ public class UserControllerTest {
 
     @Test
     @Order(3)
-    public void addUser_invalidDepartmentId_returnErrorMessage() throws Exception {
+    public void addUser_invalidDepartmentId_returnsErrorMessage() throws Exception {
         RequestBuilder requestBuilder = post("/user/add/1000")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -90,7 +87,7 @@ public class UserControllerTest {
 
     @Test
     @Order(4)
-    public void findUser_correctUserName_returnUser() throws Exception {
+    public void findUser_correctUserName_returnsUser() throws Exception {
         RequestBuilder requestBuilder = get("/user/find")
                 .param("name", "Kostya");
 
@@ -113,7 +110,7 @@ public class UserControllerTest {
 
     @Test
     @Order(5)
-    public void findUser_incorrectUserName_returnEmptyList() throws Exception {
+    public void findUser_incorrectUserName_returnsEmptyList() throws Exception {
         RequestBuilder requestBuilder = get("/user/find")
                 .param("name", " ");
 
@@ -125,7 +122,7 @@ public class UserControllerTest {
 
     @Test
     @Order(8)
-    public void deleteUser_validId_returnUserDto() throws Exception {
+    public void deleteUser_validId_returnsUserDto() throws Exception {
         RequestBuilder requestBuilder = get("/user/delete")
                         .param("id", "2");
 
@@ -146,7 +143,7 @@ public class UserControllerTest {
 
     @Test
     @Order(9)
-    public void deleteUser_invalidId_returnErrorMessage() throws Exception {
+    public void deleteUser_invalidId_returnsErrorMessage() throws Exception {
         RequestBuilder requestBuilder = get("/user/delete")
                 .param("id", "1000");
 
@@ -159,7 +156,7 @@ public class UserControllerTest {
     @Rollback
     @Test
     @Order(6)
-    public void changeUserName_validUserId_returnUpdatedUser() throws Exception {
+    public void changeUserName_validUserId_returnsUpdatedUser() throws Exception {
         RequestBuilder requestBuilder = get("/user/change-name")
                 .param("id", "2")
                 .param("name", "Toha");
@@ -181,7 +178,7 @@ public class UserControllerTest {
 
     @Test
     @Order(7)
-    public void changeUserName_invalidUserId_returnErrorMessage() throws Exception {
+    public void changeUserName_invalidUserId_returnsErrorMessage() throws Exception {
         RequestBuilder requestBuilder = get("/user/change-name")
                 .param("id", "1000")
                 .param("name", "Toha");
@@ -194,7 +191,7 @@ public class UserControllerTest {
 
     @Test
     @Order(10)
-    public void sendUserId_returnStatusOk() throws Exception {
+    public void sendUserId_returnsStatusOk() throws Exception {
         RequestBuilder requestBuilder = get("/user/send-id")
                 .param("id", "5");
 

@@ -1,8 +1,6 @@
 package sc.springProject.services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sc.springProject.dto.UserDto;
 import sc.springProject.entities.Department;
@@ -37,10 +35,8 @@ public class DepartmentService {
         return users.stream().map(dtoMapper::mapToUserDto).toList();
     }
 
-    public Department addNewDepartment(String name){
-        Department department = new Department(name);
+    public void addNewDepartment(Department department){
         departmentRepository.save(department);
-        return department;
     }
 
     public void swapUserDepartments(long firstUserId, long secondUserId){

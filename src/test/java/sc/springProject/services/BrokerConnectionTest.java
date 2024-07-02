@@ -4,18 +4,22 @@ import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.Nats;
 import io.nats.client.Subscription;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import sc.springProject.kafka.KafkaProducer;
 
 import java.io.IOException;
 
 @SpringBootTest
-public class NatsTest {
+public class BrokerConnectionTest {
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @Test
-    public void batsConnectionTest() throws IOException, InterruptedException {
+    public void natsConnectionTest() throws IOException, InterruptedException {
         Connection natsConnection = Nats.connect("192.168.246.64:4222");
         Subscription subscription1 = natsConnection.subscribe("test");
 
@@ -26,4 +30,10 @@ public class NatsTest {
         Assertions.assertNotNull(message);
         Assertions.assertEquals("HelloFromNuts!!!", new String(message.getData()));
     }
+
+    @Test
+    public void kafkaConnectionTest(){
+        kafkaProducer.sendMessage("Connection Test");
+    }
+
 }
