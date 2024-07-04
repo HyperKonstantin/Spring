@@ -46,6 +46,9 @@ Kafka: (https://habr.com/ru/companies/slurm/articles/719540/)
         - чтение записей, отправленных до входа consumer: --consumer-property auto.offset.reset=earliest (shortcut: --from-beginning)
         - задать группу: --group <group name>
 
+MongoDb: (https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-20-04-ru)
+    проверка работоспособности [sudo systemctl status mongod]
+
 
 
 

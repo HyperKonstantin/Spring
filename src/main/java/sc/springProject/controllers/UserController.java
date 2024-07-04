@@ -90,6 +90,6 @@ public class UserController {
 
     @GetMapping("/send-id")
     public ResponseEntity<?> sendUserId(@RequestParam long id){
-        return userService.sendIdToNatsListener(id);
+        return userService.sendIdToListener(id);
     }
 }

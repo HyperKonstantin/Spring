@@ -1,5 +1,6 @@
 package sc.springProject.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -141,10 +142,18 @@ public class UserService {
         log.info("{} created!!!", username);
     }
 
-    public ResponseEntity<?> sendIdToNatsListener(long id) {
-        kafkaProducer.sendMessage(String.valueOf(id));
-        log.info("Sending message: {}", id);
+    @SneakyThrows
+    public ResponseEntity<?> sendIdToListener(long id) {
+        Optional<User> userOptional = userRepository.findById(id);
 
-        return new ResponseEntity<>(HttpStatus.OK) ;
+        if (userOptional.isEmpty()){
+            return new ResponseEntity<>("Пользователя с таким id не существует!", HttpStatus.BAD_REQUEST);
+        }
+
+        UserDto userDto = dtoMapper.mapToUserDto(userOptional.get());
+        kafkaProducer.sendMessage((new ObjectMapper()).writeValueAsString(userDto));
+        log.info("Sending user: {}", userDto.getName());
+
+        return new ResponseEntity<>("Пользователь "+ userDto.getName() + " отправлен!", HttpStatus.OK) ;
     }
 }
