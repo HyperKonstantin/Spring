@@ -93,6 +93,13 @@
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
 
+		<dependency> <!-- docker compose -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

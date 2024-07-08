@@ -31,6 +31,13 @@ spring:
     password: ccs
     baselineOnMigrate: true
 
+  kafka:
+    bootstrap-servers: localhost:29092
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+
 logging:
   level:
     root: INFO

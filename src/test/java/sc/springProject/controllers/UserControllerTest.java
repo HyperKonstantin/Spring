@@ -191,11 +191,25 @@ public class UserControllerTest {
 
     @Test
     @Order(10)
-    public void sendUserId_returnsStatusOk() throws Exception {
+    public void sendUserId_validId_returnsStatusOk() throws Exception {
         RequestBuilder requestBuilder = get("/user/send-id")
-                .param("id", "5");
+                .param("id", "1");
 
         mockMvc.perform(requestBuilder)
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
+                .andExpect(content().string("Пользователь Kostya отправлен!"));
+    }
+
+    @Test
+    @Order(11)
+    public void sendUserId_invalidId_returnsErrorMessage() throws Exception {
+        RequestBuilder requestBuilder = get("/user/send-id")
+                .param("id", "1000");
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
+                .andExpect(content().string("Пользователя с таким id не существует!"));
     }
 }

@@ -104,45 +104,6 @@ public class UserService {
     }
 
     @SneakyThrows
-    @Transactional
-    public void stressTest(){
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-        List<Future> futures = new ArrayList<>();
-
-
-        for (int i = 0; i < 30; i++){
-            futures.add(executorService.submit(this::addUser));
-        }
-
-        for (Future future : futures){
-            future.get();
-        }
-        executorService.shutdown();
-    }
-
-    public void addUser(){
-        String username = "User" + (int)(random() * 1000);
-        log.info("Creating {}...", username);
-
-        User user = User.builder()
-                .name(username)
-                .age(20)
-                .salary(250)
-                .department(departmentRepository.findById(52L).get())
-                .build();
-        userRepository.saveAndFlush(user);
-        entityManager.clear();
-
-        try {
-            updateDepartmentAverageSalary(52L);
-        }
-        catch (ObjectOptimisticLockingFailureException e){
-            log.info("Locked ({})", username);
-        }
-        log.info("{} created!!!", username);
-    }
-
-    @SneakyThrows
     public ResponseEntity<?> sendIdToListener(long id) {
         Optional<User> userOptional = userRepository.findById(id);
 

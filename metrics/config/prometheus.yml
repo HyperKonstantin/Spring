@@ -3,16 +3,16 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['192.168.246.105:8080']
+      - targets: ['192.168.246.124:8080']
 
   - job_name: 'postgres_monitoring'
     scrape_interval: 5s
     metrics_path: '/metrics'
     static_configs:
-      - targets: [ '192.168.246.105:9187' ]
+      - targets: [ '192.168.246.124:9187' ]
 
   - job_name: 'jmeter_monitoring'
     scrape_interval: 5s
     metrics_path: '/metrics'
     static_configs:
-      - targets: [ '192.168.246.105:9270' ]
+      - targets: [ '192.168.246.124:9270' ]
