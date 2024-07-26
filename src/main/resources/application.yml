@@ -32,21 +32,20 @@ spring:
     baselineOnMigrate: true
 
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:9092 # 29092 для docker-compose
+    producer:
+      transaction-id-prefix: tx- # включение транзакций Kafka
 
   docker:
     compose:
-      lifecycle-management: start_only
+      lifecycle-management: none
 
 logging:
   level:
     root: INFO
-    com.mypackage: ERROR
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
     file: "%d %p %c{1.} [%t] %m%n"
-  file:
-    name: app.log
 
 # метрики, prometheus
 management:

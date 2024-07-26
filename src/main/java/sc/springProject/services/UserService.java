@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sc.springProject.dto.UserDto;
@@ -116,5 +115,23 @@ public class UserService {
         log.info("Sending user: {}", userDto.getName());
 
         return new ResponseEntity<>("Пользователь "+ userDto.getName() + " отправлен!", HttpStatus.OK) ;
+    }
+
+    @SneakyThrows
+    @Transactional("kafkaTransactionManager")
+    public ResponseEntity<?> sendTransactionalIdToListener(long id) {
+        kafkaProducer.sendTransactionalMessage("sending user");
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty()){
+            throw new RuntimeException("user is not exists");
+        }
+
+        UserDto userDto = dtoMapper.mapToUserDto(userOptional.get());
+        kafkaProducer.sendTransactionalMessage((new ObjectMapper()).writeValueAsString(userDto));
+        log.info("Sending user: {}", userDto.getName());
+
+        return new ResponseEntity<>("Пользователь "+ userDto.getName() + " отправлен!", HttpStatus.OK);
     }
 }

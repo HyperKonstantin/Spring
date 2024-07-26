@@ -35,7 +35,7 @@ public class UserController {
 
     @Operation(
             summary = "Добавляет пользователя",
-            description = "Принимает параметры <strong>name, age</strong> и <strong>salary</strong> в теле запроса в формате JSON и <strong>id</strong> в url"
+            description = "Принимает параметры <strong>name, age</strong> и <strong>salary</strong> в теле запроса в формате JSON и <strong>id</strong> отдела в url"
     )
     @PostMapping("/add/{id}")
     public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable("id") long departmentId){
@@ -92,4 +92,10 @@ public class UserController {
     public ResponseEntity<?> sendUserId(@RequestParam long id){
         return userService.sendIdToListener(id);
     }
+
+    @GetMapping("/send-id-tx")
+    public ResponseEntity<?> sendTransactionalUserId(@RequestParam long id){
+        return userService.sendTransactionalIdToListener(id);
+    }
+
 }

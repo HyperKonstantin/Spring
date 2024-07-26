@@ -51,7 +51,7 @@ MongoDb: (https://www.digitalocean.com/community/tutorials/how-to-install-mongod
 
 
 
-
+запуск программы с установкой значений в application.yml [mvn spring-boot:run -Dspring-boot.run.arguments=--<param.param>=<value>]
 
 
 

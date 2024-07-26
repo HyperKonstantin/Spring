@@ -11,4 +11,9 @@ public class KafkaConfiguration {
     public NewTopic newTopic(){
         return new NewTopic("user", 1, (short) 1);
     }
+
+    @Bean
+    public NewTopic transactionsTopic() {
+        return new NewTopic("transaction", 3, (short) 1);
+    }
 }
