@@ -17,4 +17,8 @@ public class KafkaProducer {
     public void sendTransactionalMessage(String message){
         kafkaTemplate.send("transaction", message);
     }
+
+    public void sendUsersToBatchConsume(String message){
+        kafkaTemplate.send("batch", message);
+    }
 }

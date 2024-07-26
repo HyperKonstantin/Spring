@@ -16,15 +16,9 @@ import sc.springProject.kafka.KafkaProducer;
 import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.repositories.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import static java.lang.Math.random;
 
 @Service
 @RequiredArgsConstructor
@@ -133,5 +127,16 @@ public class UserService {
         log.info("Sending user: {}", userDto.getName());
 
         return new ResponseEntity<>("Пользователь "+ userDto.getName() + " отправлен!", HttpStatus.OK);
+    }
+
+    @SneakyThrows
+    @Transactional("kafkaTransactionManager")
+    public ResponseEntity<?> sendAllUsers() {
+        List<UserDto> users = userRepository.findAll().stream().map(usr -> (new DtoMapper()).mapToUserDto(usr)).toList();
+
+        for (UserDto userDto : users){
+            kafkaProducer.sendUsersToBatchConsume((new ObjectMapper()).writeValueAsString(userDto));
+        }
+        return new ResponseEntity<>("Пользователи отправлены", HttpStatus.OK);
     }
 }

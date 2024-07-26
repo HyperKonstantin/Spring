@@ -88,14 +88,26 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping("/send-id")
+    @GetMapping("/send")
     public ResponseEntity<?> sendUserId(@RequestParam long id){
         return userService.sendIdToListener(id);
     }
 
-    @GetMapping("/send-id-tx")
+    @Operation(
+            summary = "Отправляет пользователя (проверка kafka transaction)"
+    )
+    @GetMapping("/send-tx")
     public ResponseEntity<?> sendTransactionalUserId(@RequestParam long id){
         return userService.sendTransactionalIdToListener(id);
     }
+
+    @Operation(
+            summary = "Отправляет всех пользователей (проверка batch)"
+    )
+    @GetMapping("/send-all")
+    public ResponseEntity<?> sendAll(){
+        return userService.sendAllUsers();
+    }
+
 
 }
