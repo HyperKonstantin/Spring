@@ -1,7 +1,6 @@
 подключения
 
-    за подключение отвечает папка scripts.
-    docker запускается командой [docker compose up --build] из папки scripts
+    docker запускается командой [docker compose up --build]
     команда для полного перезапуска в случае ошибок: [docker compose up -d --force-recreate]
     для получения ip адреса prometeus при добавлении его в grafana команда [docker inspect <container id>]
     id контейнера получить командой [docker container ls]

@@ -10,6 +10,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import sc.springProject.dto.UserDto;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
+import sc.springProject.entities.UserView;
 import sc.springProject.repositories.UserRepository;
 
 import java.util.ArrayList;
@@ -43,12 +44,12 @@ public class UserServiceTest {
         Mockito.doReturn(firstUserDto).when(dtoMapper).mapToUserDto(Mockito.eq(users.get(0)));
         Mockito.doReturn(secondUserDto).when(dtoMapper).mapToUserDto(Mockito.eq(users.get(1)));
 
-        List<UserDto> usersDto = userService.getAllUsers();
+        List<UserView> usersView = userService.getAllUsers();
 
-        Assertions.assertNotNull(usersDto);
-        Assertions.assertEquals(2, usersDto.size());
-        Assertions.assertEquals(firstUserDto, usersDto.get(0));
-        Assertions.assertEquals(secondUserDto, usersDto.get(1));
+        Assertions.assertNotNull(usersView);
+        Assertions.assertEquals(2, usersView.size());
+        Assertions.assertEquals(firstUserDto, usersView.get(0));
+        Assertions.assertEquals(secondUserDto, usersView.get(1));
     }
 
     private UserDto getTestUserDto(User user){

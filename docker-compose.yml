@@ -35,31 +35,31 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
-  grafana:
-    build: './metrics/config/grafana'
-    ports:
-      - 3000:3000
-    volumes:
-      - ./metrics/grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    user: "0"
-    networks:
-      monitoring:
-        aliases:
-          - grafana
-
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - ./metrics/config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./metrics/prometheus:/prometheus
-    networks:
-      monitoring:
-        aliases:
-          - prometheus
-networks:
-  monitoring:
+#  grafana:
+#    build: './metrics/config/grafana'
+#    ports:
+#      - 3000:3000
+#    volumes:
+#      - ./metrics/grafana:/var/lib/grafana
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#    user: "0"
+#    networks:
+#      monitoring:
+#        aliases:
+#          - grafana
+#
+#  prometheus:
+#    image: prom/prometheus
+#    ports:
+#      - 9090:9090
+#    volumes:
+#      - ./metrics/config/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - ./metrics/prometheus:/prometheus
+#    networks:
+#      monitoring:
+#        aliases:
+#          - prometheus
+#networks:
+#  monitoring:

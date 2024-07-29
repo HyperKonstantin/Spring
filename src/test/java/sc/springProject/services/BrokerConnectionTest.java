@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import sc.springProject.kafka.KafkaProducer;
+import sc.springProject.kafka.KafkaMessageProducer;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class BrokerConnectionTest {
 
     @Autowired
-    private KafkaProducer kafkaProducer;
+    private KafkaMessageProducer kafkaMessageProducer;
 
     @Test
     public void natsConnectionTest() throws IOException, InterruptedException {
@@ -33,7 +33,7 @@ public class BrokerConnectionTest {
 
     @Test
     public void kafkaConnectionTest(){
-        kafkaProducer.sendMessage("Connection Test");
+        kafkaMessageProducer.sendMessage("message","Connection Test");
     }
 
 }

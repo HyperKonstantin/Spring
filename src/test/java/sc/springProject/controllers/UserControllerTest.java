@@ -59,7 +59,6 @@ public class UserControllerTest {
                             "name":"Egor",
                             "age":44,
                             "salary":1300,
-                            "averageDepartmentSalary":null,
                             "department":"development"
                         }
                         """))
@@ -101,7 +100,6 @@ public class UserControllerTest {
                                 "name": "Kostya",
                                 "age": 19,
                                 "salary": 1000,
-                                "averageDepartmentSalary": null ,
                                 "department": "development"
                             }
                         ]
@@ -135,7 +133,6 @@ public class UserControllerTest {
                             "name": "Anton",
                             "age": 20,
                             "salary": 500,
-                            "averageDepartmentSalary": null,
                             "department": "testing"
                         }
                         """));
@@ -170,7 +167,6 @@ public class UserControllerTest {
                             "name": "Toha",
                             "age": 20,
                             "salary": 500,
-                            "averageDepartmentSalary": null,
                             "department": "testing"
                         }
                         """));
@@ -192,7 +188,7 @@ public class UserControllerTest {
     @Test
     @Order(10)
     public void sendUserId_validId_returnsStatusOk() throws Exception {
-        RequestBuilder requestBuilder = get("/user/send-id")
+        RequestBuilder requestBuilder = get("/user/send")
                 .param("id", "1");
 
         mockMvc.perform(requestBuilder)
@@ -204,12 +200,47 @@ public class UserControllerTest {
     @Test
     @Order(11)
     public void sendUserId_invalidId_returnsErrorMessage() throws Exception {
-        RequestBuilder requestBuilder = get("/user/send-id")
+        RequestBuilder requestBuilder = get("/user/send")
                 .param("id", "1000");
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
                 .andExpect(content().string("Пользователя с таким id не существует!"));
+    }
+
+    @Test
+    @Order(12)
+    public void sendTransactionalUserId_validId_returnsStatusOk() throws Exception {
+        RequestBuilder requestBuilder = get("/user/send-tx")
+                .param("id", "1");
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
+                .andExpect(content().string("Пользователь Kostya отправлен!"));
+    }
+
+    @Test
+    @Order(13)
+    public void sendTransactionalUserId_invalidId_returnsErrorMessage() throws Exception {
+        RequestBuilder requestBuilder = get("/user/send-tx")
+                .param("id", "1000");
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
+                .andExpect(content().string("Пользователя с таким id не существует!"));
+    }
+
+    @Test
+    @Order(14)
+    public void sendBatchUsers_returnsStatusOk() throws Exception {
+        RequestBuilder requestBuilder = get("/user/send-all");
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8)))
+                .andExpect(content().string("Пользователи отправлены"));
     }
 }

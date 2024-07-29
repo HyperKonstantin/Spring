@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sc.springProject.dto.UserDto;
 import sc.springProject.entities.User;
+import sc.springProject.entities.UserView;
 import sc.springProject.services.UserService;
 
 @Tag(name = "UserQuery", description = "работает с данными пользователя")
@@ -39,13 +39,13 @@ public class UserController {
     )
     @PostMapping("/add/{id}")
     public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable("id") long departmentId){
-        UserDto userDto = userService.newUser(user, departmentId);
+        UserView userView = userService.newUser(user, departmentId);
 
-        if (userDto == null){
+        if (userView == null){
             return new ResponseEntity<>("указанный отдел отсутствует", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(userView, HttpStatus.CREATED);
     }
 
     @Operation(
@@ -63,13 +63,13 @@ public class UserController {
     )
     @GetMapping("/delete")
     public ResponseEntity<?> deleteUser(@RequestParam long id){
-        UserDto userDto = userService.deleteUser(id);
+        UserView userView = userService.deleteUser(id);
 
-        if (userDto == null){
+        if (userView == null){
             return new ResponseEntity<>("Такого пользователя нет", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        return new ResponseEntity<>(userView, HttpStatus.OK);
     }
 
     @Operation(
@@ -79,13 +79,13 @@ public class UserController {
     @Transactional
     @GetMapping("/change-name")
     public ResponseEntity<?> changeUserName(@RequestParam long id, @RequestParam String name){
-        UserDto userDto = userService.changeName(id, name);
+        UserView userView = userService.changeName(id, name);
 
-        if (userDto == null){
+        if (userView == null){
             return new ResponseEntity<>("Пользователя с таким id нет!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        return new ResponseEntity<>(userView, HttpStatus.OK);
     }
 
     @GetMapping("/send")
@@ -109,5 +109,9 @@ public class UserController {
         return userService.sendAllUsers();
     }
 
+    @GetMapping("/kafka-test")
+    public ResponseEntity<?> kafkaTest(@RequestParam int count, @RequestParam int time){
+        return userService.kafkaTest(count, time);
+    }
 
 }
