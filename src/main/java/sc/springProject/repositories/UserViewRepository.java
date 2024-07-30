@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface UserViewRepository extends ViewJpaRepository<UserView, Long> {
     List<UserView> findByName(String name);
+
+    List<UserView> findByDepartment(String name);
 }

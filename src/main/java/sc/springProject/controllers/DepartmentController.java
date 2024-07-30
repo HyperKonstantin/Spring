@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sc.springProject.dto.UserDto;
-
 import sc.springProject.entities.Department;
+import sc.springProject.entities.UserView;
 import sc.springProject.services.DepartmentService;
 
 import java.util.List;
@@ -34,13 +33,13 @@ public class DepartmentController {
     @Operation(summary = "Находит всех сотрудников отдела по его id")
     @GetMapping("/find-users")
     public ResponseEntity<?> FindUserByDepartmentId(@RequestParam("id") long departmentId){
-        List<UserDto> usersDto = departmentService.getAllUsersFromDepartment(departmentId);
+        List<UserView> users = departmentService.getAllUsersFromDepartment(departmentId);
 
-        if (usersDto == null) {
+        if (users == null) {
             return new ResponseEntity<>("такого отдела нет", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(usersDto, HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @Operation(summary = "Добавляет отдел")

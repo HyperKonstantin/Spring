@@ -2,11 +2,12 @@ package sc.springProject.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import sc.springProject.dto.UserDto;
 import sc.springProject.entities.Department;
 import sc.springProject.entities.User;
+import sc.springProject.entities.UserView;
 import sc.springProject.repositories.DepartmentRepository;
 import sc.springProject.repositories.UserRepository;
+import sc.springProject.repositories.UserViewRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,22 +18,20 @@ public class DepartmentService {
 
     private DepartmentRepository departmentRepository;
     private UserRepository userRepository;
-
-    private DtoMapper dtoMapper;
+    private UserViewRepository userViewRepository;
 
     public List<Department> getAllDepartments(){
         return departmentRepository.findAll();
     }
 
-    public List<UserDto> getAllUsersFromDepartment(long departmentId){
+    public List<UserView> getAllUsersFromDepartment(long departmentId){
         Optional<Department> department = departmentRepository.findById(departmentId);
 
         if (department.isEmpty()) {
             return null;
         }
 
-        List<User> users = userRepository.findByDepartment(department.get());
-        return users.stream().map(dtoMapper::mapToUserDto).toList();
+        return userViewRepository.findByDepartment(department.get().getName());
     }
 
     public void addNewDepartment(Department department){
